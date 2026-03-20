@@ -184,7 +184,7 @@ pipeline {
     }
     post { 
         always {
-            node {
+            script {
                 archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true
             }
