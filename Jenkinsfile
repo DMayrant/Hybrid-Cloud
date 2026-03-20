@@ -15,12 +15,7 @@ pipeline {
         )
     }
 
-    stages {
-        stage ('TEST') {
-            steps {
-                echo 'Stages are running 🔥'
-            }
-        }
+    stages {    
         stage ('Checkout') {
             steps {
                 checkout scm 
@@ -186,14 +181,20 @@ pipeline {
                 '''
             }
         }
-    }
-    post { 
-        always {
-            script {
+        stage ('Archive Reports') {
+            steps {
+                sh '''
+                echo "=== VERIFY ARTIFACTS ==="
+                pwd
+                ls -lah
+                find . -name "*.json" || true
+                '''
                 archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true 
-            }        
-        }   
+                archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true
+            }
+        }
+    }
+    post {   
         success {
             echo 'Pipeline executed successful ✅'
         }
