@@ -169,7 +169,7 @@ pipeline {
         }
         stage ('Terraform Destroy') {
             when {
-                expression { params.DESTROY == true }
+                expression { params.ACTION == 'destroy' }
             }
             steps {
                 sh '''
