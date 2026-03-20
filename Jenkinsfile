@@ -26,6 +26,7 @@ pipeline {
                 echo 'Running Checkov Scan...'
                 
                 docker run --rm \
+                  -u $(id -u):$(id -g) \
                   -v "$(pwd):/iac" \
                   bridgecrew/checkov \
                   -d /iac \
@@ -47,6 +48,7 @@ pipeline {
                 echo 'Running Tfsec scan...'
 
                 docker run --rm \
+                  -u $(id -u):$(id -g) \
                   -v "$(pwd):/iac" \
                   aquasec/tfsec /iac \
                   --format json \
