@@ -46,6 +46,13 @@ pipeline {
                 '''
             }
         }
+        stage ('Terraform Version') {
+            steps {
+                sh '''
+                terraform version
+                '''
+            }
+        }
         stage ('Terraform format') {
             when {
                 expression { params.ACTION == 'apply' }
