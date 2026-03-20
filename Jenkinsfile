@@ -26,14 +26,12 @@ pipeline {
                 echo 'Running Checkov Scan...'
                 
                 docker run --rm \
-                  -u $(id -u):$(id -g) \
-                  -v "$(pwd):/iac" \
-                  bridgecrew/checkov \
-                  -d /iac/Site-to-Site-VPN
+                  -u $(id -u):$(id -g) -v "$(pwd):/iac" bridgecrew/checkov \
+                  -d /iac \
                   --framework terraform,kubernetes \
                   --check HIGH \
                   --output json \
-                  --output-file-path /iac/checkov-report.json
+                  --output-file-path /iac/checkov-report.jso
                 '''
             }
         }
@@ -47,10 +45,8 @@ pipeline {
 
                 echo 'Running Tfsec scan...'
 
-                docker run --rm \
-                  -u $(id -u):$(id -g) \
-                  -v "$(pwd):/iac" \
-                  aquasec/tfsec /iac/Site-to-Site-VPN \
+                docker run --rm -u $(id -u):$(id -g) -v "$(pwd):/iac" aquasec/tfsec \
+                  /iac \
                   --format json \
                   --out /iac/tfsec-report.json
                 '''
