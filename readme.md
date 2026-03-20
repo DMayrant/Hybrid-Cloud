@@ -20,4 +20,5 @@ To view specific services
 terraform state show <resource>
 terraform state list | grep <resource>
 ```
-![image alt](https://github.com/DMayrant/Hybrid-Cloud/blob/main/Hybrid-Cloud.jpeg?raw=true)
+![image alt](<img width="5280" height="1520" alt="image" src="https://github.com/user-attachments/assets/fd0d412c-c80d-4204-b0d9-a7f9d11c8a8c" />)
+
