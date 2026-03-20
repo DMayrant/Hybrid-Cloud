@@ -29,7 +29,7 @@ pipeline {
                   -u $(id -u):$(id -g) \
                   -v "$(pwd):/iac" \
                   bridgecrew/checkov \
-                  -d /terraform/Site-to-Site-VPN
+                  -d /iac/Site-to-Site-VPN
                   --framework terraform,kubernetes \
                   --check HIGH \
                   --output json \
@@ -50,7 +50,7 @@ pipeline {
                 docker run --rm \
                   -u $(id -u):$(id -g) \
                   -v "$(pwd):/iac" \
-                  aquasec/tfsec /terraform/Site-to-Site-VPN \
+                  aquasec/tfsec /iac/Site-to-Site-VPN \
                   --format json \
                   --out /iac/tfsec-report.json
                 '''
