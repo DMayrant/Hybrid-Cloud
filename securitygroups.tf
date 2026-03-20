@@ -38,7 +38,11 @@ resource "aws_security_group" "alb_sg" {
   }
 
   ingress {
+<<<<<<< HEAD
     description = "HTTP (optional, if redirecting)"
+=======
+    description = "traffic over HTTP"
+>>>>>>> 8eba4e9 (Add Terraform infrastructure and Jenkins pipeline)
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"

@@ -21,7 +21,7 @@ pipeline {
                   --framework terraform,kubernetes \
                   --check HIGH \
                   --output json \
-                  --output-file-path checkov-report.json
+                  --output-file-path /iac/checkov-report.json
                 '''
             }
         }
@@ -36,12 +36,15 @@ pipeline {
                   -v $(pwd):/iac \
                   aquasec/tfsec /iac \
                   --format json \
-                  --out tfsec-report.json
+                  --out /iac/tfsec-report.json
                 '''
             }
         }    
     }
     post { 
+        always {
+            archiveArtifacts artifacts: '*.json', fingerprint: true
+        }
         success {
             echo 'Pipeline executed successful ✅'
         }
