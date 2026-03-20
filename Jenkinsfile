@@ -91,20 +91,25 @@ pipeline {
             }
             steps {
                 sh '''
-                set -euo pipefail 
+                set -euo pipefail
 
                 echo 'Running Checkov Scan...'
+                echo "PWD=$(pwd)"
+                find . -type f -name "*.tf" -print
 
                 docker run --rm \
-                  -u $(id -u):$(id -g) \
-                  -v "$PWD":/iac \
-                  bridgecrew/checkov \
-                  -d /iac \
-                  --framework terraform \
-                  --download-external-modules true \
-                  --quiet \
-                  --output json \
-                  --output-file-path /iac/checkov-report.json
+                  --workdir /iac \
+                  -u "$(id -u):$(id -g)" \
+                -v "$(pwd):/iac" \
+                bridgecrew/checkov:latest \
+                -d /iac \
+                --framework terraform \
+                --download-external-modules true \
+                --evaluate-variables true \
+                --quiet \
+                --output json \
+                --output-file-path /iac/checkov-report.json
+                    
                 '''
             }
         }
@@ -115,11 +120,16 @@ pipeline {
             steps {
                 sh '''
                 set -euo pipefail 
+                set -euo pipefail
 
                 echo 'Running Tfsec scan...'
+                echo "PWD=$(pwd)"
+                find . -type f -name "*.tf" -print
+
                 docker run --rm \
-                  -u $(id -u):$(id -g) \
-                  -v "$PWD":/iac \
+                  --workdir /iac \
+                  -u "$(id -u):$(id -g)" \
+                  -v "$(pwd):/iac" \
                   aquasec/tfsec /iac \
                   --format json \
                   --out /iac/tfsec-report.json
