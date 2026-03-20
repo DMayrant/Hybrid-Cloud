@@ -133,7 +133,7 @@ pipeline {
     }
     post { 
         always {
-            archiveArtifacts artifacts: '*.json, tfplan', fingerprint: true
+            archiveArtifacts artifacts: '*.json,tfplan', fingerprint: true
         }
         success {
             echo 'Pipeline executed successful ✅'
