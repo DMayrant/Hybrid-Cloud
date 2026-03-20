@@ -8,6 +8,9 @@ pipeline {
             }
         }
         stage ('Checkov Scan') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
             steps {
                 sh '''
                 set -euo pipefail 
@@ -25,7 +28,10 @@ pipeline {
                 '''
             }
         }
-    stage ('Tfsec Scan') {
+        stage ('Tfsec Scan') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
             steps {
                 sh '''
                 set -euo pipefail 
@@ -39,11 +45,88 @@ pipeline {
                   --out /iac/tfsec-report.json
                 '''
             }
-        }    
+        }
+        stage ('Terraform format') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }    
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Adjusting terraform format...'
+                terraform fmt -check -recursive
+                '''
+            }
+        }
+        stage ('Terraform init') {
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Running Terraform init...'
+                terraform init 
+                '''
+            }
+        }
+        stage ('Terraform validate') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Validating Terraform configuration...'
+
+                terraform validate
+                '''
+            }
+        } 
+        stage ('Terraform plan') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Checking terraform infrastructure...'
+                terraform plan -out=tfplan
+                '''
+            }
+        }
+        stage ('Terraform Apply') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Applying terraform infrastructure'
+                terraform apply -auto-approve tfplan
+                '''
+            }
+        }
+        stage ('Terraform Destroy') {
+            when {
+                expression { params.ACTION == 'destroy' }
+            }
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Destroying terraform infrastructure and resources...'
+                terraform init 
+                terraform destroy -auto-approve
+                '''
+            }
+        }
     }
     post { 
         always {
-            archiveArtifacts artifacts: '*.json', fingerprint: true
+            archiveArtifacts artifacts: '*.json, tfplan', fingerprint: true
         }
         success {
             echo 'Pipeline executed successful ✅'
