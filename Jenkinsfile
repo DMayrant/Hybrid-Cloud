@@ -15,6 +15,14 @@ pipeline {
                 checkout scm 
             }
         }
+        stage ('Check Terraform files') {
+            steps {
+                sh '''
+                echo "Terraform files:"
+                find . -name "*.tf"
+                '''
+            }
+        }
         stage ('Checkov Scan') {
             when {
                 expression { params.ACTION == 'apply' }
@@ -24,13 +32,15 @@ pipeline {
                 set -euo pipefail 
 
                 echo 'Running Checkov Scan...'
-                
+
                 docker run --rm \
                   -u $(id -u):$(id -g) \
                   -v "$PWD":/iac \
                   bridgecrew/checkov \
                   -d /iac \
                   --framework terraform \
+                  --download-external-modules true \
+                  --quiet \
                   --output json \
                   --output-file-path /iac/checkov-report.json
                 '''
@@ -142,6 +152,7 @@ pipeline {
                 expression { params.ACTION == 'apply' }
             }
             steps {
+                
                 sh '''
                 set -euo pipefail 
 
