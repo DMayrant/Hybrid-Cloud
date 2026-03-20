@@ -1,6 +1,12 @@
 pipeline { 
     agent any 
-    
+
+    environment {
+    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+    AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+    AWS_DEFAULT_REGION = 'us-east-1'
+   
+    }  
     parameters {
         choice (
              name: 'ACTION',
@@ -137,6 +143,7 @@ pipeline {
         stage ('Terraform plan ✅') {
             when {
                 expression { params.ACTION == 'apply' }
+                
             }
             steps {
                 sh '''
