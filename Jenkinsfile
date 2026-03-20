@@ -16,6 +16,11 @@ pipeline {
     }
 
     stages {
+        stage ('TEST') {
+            steps {
+                echo 'Stages are running 🔥'
+            }
+        }
         stage ('Checkout') {
             steps {
                 checkout scm 
