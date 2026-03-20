@@ -142,7 +142,7 @@ pipeline {
         } 
         stage ('Terraform plan ✅') {
             when {
-                expression { params.ACTION == 'apply' }
+                expression { params.ACTION == 'apply' || params.ACTION == 'plan' }
                 
             }
             steps {
