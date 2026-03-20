@@ -1,7 +1,7 @@
 resource "aws_dx_gateway" "primary" {
   name            = "dx-gateway"
   amazon_side_asn = 64512
-  
+
 }
 
 resource "aws_dx_gateway_association" "example" {

@@ -27,7 +27,7 @@ pipeline {
                 
                 docker run --rm \
                   -u $(id -u):$(id -g) \
-                  -v "$(pwd)":/iac \
+                  -v "$PWD"":/iac \
                   bridgecrew/checkov \
                   -d /iac \
                   --framework terraform \
@@ -47,7 +47,7 @@ pipeline {
                 echo 'Running Tfsec scan...'
                 docker run --rm \
                   -u $(id -u):$(id -g) \
-                  -v "$(pwd)":/iac \
+                  -v "$PWD"":/iac \
                   aquasec/tfsec /iac \
                   --format json \
                   --out /iac/tfsec-report.json
