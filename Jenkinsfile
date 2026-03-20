@@ -26,7 +26,7 @@ pipeline {
                 echo 'Running Checkov Scan...'
                 
                 docker run --rm \
-                  -v $(pwd):/iac \
+                  -v "$(pwd):/iac" \
                   bridgecrew/checkov \
                   -d /iac \
                   --framework terraform,kubernetes \
@@ -47,7 +47,7 @@ pipeline {
                 echo 'Running Tfsec scan...'
 
                 docker run --rm \
-                  -v $(pwd):/iac \
+                  -v "$(pwd):/iac" \
                   aquasec/tfsec /iac \
                   --format json \
                   --out /iac/tfsec-report.json
