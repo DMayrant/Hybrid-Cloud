@@ -23,47 +23,6 @@ pipeline {
                 '''
             }
         }
-        stage ('Checkov Scan') {
-            when {
-                expression { params.ACTION == 'apply' }
-            }
-            steps {
-                sh '''
-                set -euo pipefail 
-
-                echo 'Running Checkov Scan...'
-
-                docker run --rm \
-                  -u $(id -u):$(id -g) \
-                  -v "$PWD":/iac \
-                  bridgecrew/checkov \
-                  -d /iac \
-                  --framework terraform \
-                  --download-external-modules true \
-                  --quiet \
-                  --output json \
-                  --output-file-path /iac/checkov-report.json
-                '''
-            }
-        }
-        stage ('Tfsec Scan') {
-            when {
-                expression { params.ACTION == 'apply' }
-            }
-            steps {
-                sh '''
-                set -euo pipefail 
-
-                echo 'Running Tfsec scan...'
-                docker run --rm \
-                  -u $(id -u):$(id -g) \
-                  -v "$PWD":/iac \
-                  aquasec/tfsec /iac \
-                  --format json \
-                  --out /iac/tfsec-report.json
-                '''
-            }
-        }
         stage ('Debug Workspace') {
             steps {
                 sh '''
@@ -117,6 +76,47 @@ pipeline {
 
                 echo 'Running Terraform init...'
                 terraform init 
+                '''
+            }
+        }
+         stage ('Checkov Scan') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Running Checkov Scan...'
+
+                docker run --rm \
+                  -u $(id -u):$(id -g) \
+                  -v "$PWD":/iac \
+                  bridgecrew/checkov \
+                  -d /iac \
+                  --framework terraform \
+                  --download-external-modules true \
+                  --quiet \
+                  --output json \
+                  --output-file-path /iac/checkov-report.json
+                '''
+            }
+        }
+        stage ('Tfsec Scan') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+            steps {
+                sh '''
+                set -euo pipefail 
+
+                echo 'Running Tfsec scan...'
+                docker run --rm \
+                  -u $(id -u):$(id -g) \
+                  -v "$PWD":/iac \
+                  aquasec/tfsec /iac \
+                  --format json \
+                  --out /iac/tfsec-report.json
                 '''
             }
         }
