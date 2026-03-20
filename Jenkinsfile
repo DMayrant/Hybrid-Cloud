@@ -184,10 +184,8 @@ pipeline {
     }
     post { 
         always {
-            script {
-                archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true
-            }
+            archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true         
         }   
         success {
             echo 'Pipeline executed successful ✅'
