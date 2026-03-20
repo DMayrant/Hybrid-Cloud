@@ -158,8 +158,7 @@ pipeline {
             when {
                 expression { params.ACTION == 'apply' }
             }
-            steps {
-                
+            steps {       
                 sh '''
                 set -euo pipefail 
 
@@ -185,9 +184,11 @@ pipeline {
     }
     post { 
         always {
-            archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true
-        }
+            node {
+                archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true
+            }
+        }   
         success {
             echo 'Pipeline executed successful ✅'
         }
