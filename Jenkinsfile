@@ -8,11 +8,7 @@ pipeline {
     }
  
     parameters {
-        choice(
-             name: 'ACTION',
-             choices: ['apply', 'destroy', 'plan'],
-             description: 'Choose Terraform action'
-        )
+        booleanParam(name: 'DESTROY', defaultValue: false, description: 'Destroy infrastructure')
     }
 
     stages {    
