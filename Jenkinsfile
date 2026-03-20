@@ -1,11 +1,6 @@
 pipeline { 
     agent any 
 
-    environment {
-    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-    AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-    AWS_DEFAULT_REGION = 'us-east-1'
-   
     }  
     parameters {
         choice (
@@ -185,10 +180,8 @@ pipeline {
     }
     post { 
         always {
-            node {
-                archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true
-            }
+            archiveArtifacts artifacts: '**/*.json', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'tfplan', allowEmptyArchive: true
         }
         success {
             echo 'Pipeline executed successful ✅'
