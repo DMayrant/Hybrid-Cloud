@@ -140,7 +140,7 @@ pipeline {
                 '''
             }
         } 
-        stage ('Terraform plan ✅') {
+        stage ('Terraform plan') {
             when {
                 expression { params.ACTION == 'apply' || params.ACTION == 'plan' }
                 
@@ -154,7 +154,7 @@ pipeline {
                 '''
             }
         }
-        stage ('Terraform Apply 🚀') {
+        stage ('Terraform Apply') {
             when {
                 expression { params.ACTION == 'apply' }
             }
@@ -167,7 +167,7 @@ pipeline {
                 '''
             }
         }
-        stage ('Terraform Destroy 💥') {
+        stage ('Terraform Destroy') {
             when {
                 expression { params.ACTION == 'destroy' }
             }
