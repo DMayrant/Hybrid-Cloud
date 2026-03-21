@@ -106,7 +106,7 @@ pipeline {
                 --framework terraform \
                 --download-external-modules true \
                 --evaluate-variables true \
-                --quiet \
+                --output cli \
                 --output json \
                 --output-file-path /iac/checkov-report.json
                     
